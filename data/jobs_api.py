@@ -37,6 +37,8 @@ def create():
     elif set(args.keys()) > {'name', 'id'}:
         return jsonify({"ERROR": "BAD REQUEST. UNKNOWN ARGUMENTS"}), 400
     sess = db_session.create_session()
+    if sess.query(Job).filter(Job.id == request.json['id']).first():
+        return jsonify({"ERROR": "ID ALREADY EXISTS"}), 400
     job = Job(**args)
     sess.add(job)
     sess.commit()
